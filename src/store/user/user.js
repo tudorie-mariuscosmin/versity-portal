@@ -10,7 +10,7 @@ export const userSlice = createSlice({
     },
     reducers: {
         setUser: (state, action) => {
-            state.uid = action.payload.name
+            state.uid = action.payload.uid
             state.name = action.payload.name
             state.email = action.payload.email
             state.avatar = action.payload.avatar

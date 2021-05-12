@@ -9,8 +9,12 @@ import Settings from './pages/Settings'
 import Explore from './pages/Explore'
 import AddPost from './pages/AddPost'
 
+import { createHashHistory } from 'history'
+const history = createHashHistory()
+export { history }
 
 function App() {
+
   return (
     <Router>
       <Switch>
