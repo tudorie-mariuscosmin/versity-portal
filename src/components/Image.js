@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 
 const StyledImg = styled.img`
-    width:70vw;
+    width:${props => props.fullWidth ? '95vw' : ''};
     max-width:400px;
     border-radius:5px;
 `
@@ -23,16 +23,21 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     font-size:3em;
 `
 
-export default function Image({ source }) {
+export default function Image({ source, fullWidth }) {
     return (
-        <div>
+        <div className="d-flex justify-content-center">
             {
-                source !== null ? (< StyledImg src={source} />) : (
-                    <StyledContainer>
-                        <StyledFontAwesomeIcon icon={["fas", "home"]} />
+                source !== null ?
+                    (
+                        < StyledImg src={source} fullWidth={fullWidth} />
+                    )
+                    :
+                    (
+                        <StyledContainer>
+                            <StyledFontAwesomeIcon icon={["fas", "home"]} />
                         No image selected
-                    </StyledContainer>
-                )
+                        </StyledContainer>
+                    )
             }
         </div>
     )

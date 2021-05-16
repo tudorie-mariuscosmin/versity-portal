@@ -4,6 +4,7 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
+import { getUserAvatar } from '../store/user/user.selectors'
 
 
 
@@ -11,7 +12,7 @@ import { useSelector } from 'react-redux'
 
 export default function Navigation() {
 
-    const avatarUrl = useSelector(state => state.user.avatar)
+    const avatarUrl = useSelector(getUserAvatar)
     const history = useHistory();
 
     const changePage = (path) => {
