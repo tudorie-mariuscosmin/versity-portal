@@ -34,7 +34,7 @@ export default function Image({ source, fullWidth }) {
                     :
                     (
                         <StyledContainer>
-                            <StyledFontAwesomeIcon icon={["fas", "home"]} />
+                            <StyledFontAwesomeIcon icon={["fas", "image"]} />
                         No image selected
                         </StyledContainer>
                     )

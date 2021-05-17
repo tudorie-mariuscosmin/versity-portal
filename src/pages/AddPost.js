@@ -39,6 +39,7 @@ export default function AddPost() {
 
     const user = useSelector(getUser)
     const loadPhoto = (event) => {
+        console.log(event.target)
         if (event.target.files && event.target.files[0]) {
             let reader = new FileReader();
             reader.onload = (e) => {
@@ -48,7 +49,13 @@ export default function AddPost() {
 
         }
     }
-
+    const createFilePicker = () => {
+        const fileSelector = document.createElement('input');
+        fileSelector.setAttribute('type', 'file');
+        fileSelector.addEventListener('change', loadPhoto)
+        return fileSelector;
+    }
+    const filePicker = createFilePicker();
     const addPost = () => {
         const payload = {
             post: {
@@ -65,12 +72,12 @@ export default function AddPost() {
             <LoadingContainer loading={isLoading} description="Your post is being added right now!">
                 <Container fluid>
                     <StyledRow>
-                        <StyledCol xs={12} md={6}>
+                        <StyledCol onClick={() => filePicker.click()}>
                             <Image source={photo} />
                         </StyledCol>
-                        <StyledCol xs={12} md={6}>
+                        {/* <StyledCol xs={12} md={6}>
                             <Input className="form-control form-control-lg" type="file" onChange={loadPhoto} />
-                        </StyledCol>
+                        </StyledCol> */}
                     </StyledRow>
                     <StyledRow>
                         <Form.Label>Description</Form.Label>
