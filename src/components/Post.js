@@ -1,9 +1,15 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
+import { dislikePost, likePost, addComment } from '../store/post/post'
 import Comments from './Comments'
 import Image from './Image'
+import { useSelector } from 'react-redux'
+import { getUser, } from '../store/user/user.selectors'
+import LikeButton from './LikeButton'
+import { useState } from 'react'
 
 const DateContainer = styled.div`
     float:right;
@@ -17,6 +23,25 @@ const UniContainer = styled.div`
     float:right;
 `
 export default function Post({ post, showUni }) {
+    const user = useSelector(getUser)
+    const [comment, setComment] = useState('')
+    const dispatch = useDispatch()
+    const likeHandler = () => {
+        dispatch(likePost({ postId: post.id, uid: user.uid }))
+    }
+    const dislikeHandler = () => {
+        dispatch(dislikePost({ postId: post.id, uid: user.uid }))
+    }
+    const addCommentHandler = () => {
+        dispatch(addComment({
+            postId: post.id, comment: {
+                name: user.name,
+                text: comment
+            }
+        }))
+        setComment('')
+    }
+
     return (
         <div className="my-1">
             <Row>
@@ -29,7 +54,7 @@ export default function Post({ post, showUni }) {
             <Row className="mt-1">
                 <Col >
                     <div className="d-flex align-items-center h6">
-                        <FontAwesomeIcon icon={['fas', 'heart']} style={{ color: 'tomato', fontSize: '1.5em' }} className="me-2" />
+                        <LikeButton liked={post.liked} onLike={likeHandler} onDislike={dislikeHandler} />
                         {post.likes} likes
                     </div>
                 </Col>
@@ -44,8 +69,8 @@ export default function Post({ post, showUni }) {
             </Row>
             <Row>
                 <div className="d-flex">
-                    <input className="form-control form-control-sm" type="text" placeholder="Add Comment" />
-                    <button className="btn btn-primary">
+                    <input className="form-control form-control-sm" type="text" placeholder="Add Comment" value={comment} onChange={(e) => setComment(e.target.value)} />
+                    <button className="btn btn-primary" onClick={addCommentHandler}>
                         <FontAwesomeIcon icon={['fas', 'plus']} />
                     </button>
 

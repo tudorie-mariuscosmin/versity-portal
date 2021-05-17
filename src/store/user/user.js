@@ -7,7 +7,8 @@ export const userSlice = createSlice({
         name: '',
         email: '',
         avatar: '',
-        uni: ""
+        uni: "",
+        liked: []
     },
     reducers: {
         setUser: (state, action) => {
@@ -16,13 +17,21 @@ export const userSlice = createSlice({
             state.email = action.payload.email
             state.avatar = action.payload.avatar
             state.uni = action.payload.university
+            state.liked = action.payload.liked
         },
         login: state => { },
-        fetchUser: state => { }
+        fetchUser: state => { },
+        addLikePost: (state, action) => {
+            state.liked.push(action.payload)
+        },
+        removeLikedPost: (state, action) => {
+            const postIndex = state.liked.indexOf(action.payload)
+            state.liked.splice(postIndex, 1)
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, login, fetchUser } = userSlice.actions
+export const { setUser, login, fetchUser, addLikePost, removeLikedPost } = userSlice.actions
 
 export default userSlice.reducer

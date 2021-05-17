@@ -1,6 +1,7 @@
 import { takeLatest, put, call } from "redux-saga/effects";
-import { createPost, getPosts, pushPost, setPosts } from "./post";
-import { postFirebase, forwardTo, fetchPosts } from './post.services'
+import { createPost, getPosts, likePost, pushPost, setPosts, dislikePost, addComment } from "./post";
+import { addLikePost, removeLikedPost } from '../user/user'
+import { postFirebase, forwardTo, fetchPosts, likePostDb, dislikePostDb, addCommentDb } from './post.services'
 
 
 
@@ -25,6 +26,19 @@ function* fetchPostsHandler() {
     }
 }
 
+function* likePostHandler(action) {
+    yield call(likePostDb, action)
+    yield put(addLikePost(action.payload.postId))
+}
+
+function* dislikePostHandler(action) {
+    yield call(dislikePostDb, action)
+    yield put(removeLikedPost(action.payload.postId))
+}
+
+function* addCommentHandler(action) {
+    yield call(addCommentDb, action)
+}
 
 
 
@@ -32,4 +46,7 @@ function* fetchPostsHandler() {
 export default function* postSaga() {
     yield takeLatest(createPost, addPostHandler)
     yield takeLatest(getPosts, fetchPostsHandler)
+    yield takeLatest(likePost, likePostHandler)
+    yield takeLatest(dislikePost, dislikePostHandler)
+    yield takeLatest(addComment, addCommentHandler)
 }

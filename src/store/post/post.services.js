@@ -51,6 +51,44 @@ export const fetchPosts = async () => {
     return posts;
 }
 
+export const likePostDb = async (action) => {
+    try {
+        await db.collection('posts').doc(action.payload.postId).update({
+            likes: firebase.firestore.FieldValue.increment(1)
+        })
+        await db.collection('users').doc(action.payload.uid).update({
+            liked: firebase.firestore.FieldValue.arrayUnion(action.payload.postId)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+export const dislikePostDb = async (action) => {
+    try {
+        await db.collection('posts').doc(action.payload.postId).update({
+            likes: firebase.firestore.FieldValue.increment(-1)
+        })
+        await db.collection('users').doc(action.payload.uid).update({
+            liked: firebase.firestore.FieldValue.arrayRemove(action.payload.postId)
+        })
+
+    } catch (err) {
+
+    }
+}
+
+export const addCommentDb = async (action) => {
+    try {
+        await db.collection('posts').doc(action.payload.postId).update({
+            comments: firebase.firestore.FieldValue.arrayUnion(action.payload.comment)
+        })
+    } catch (err) {
+
+    }
+}
+
 
 export const forwardTo = (location) => {
     history.push(location);

@@ -22,7 +22,7 @@ export const loginUser = () => {
                     email: user.email,
                     avatar: user.photoURL,
                     university: '',
-                    likes: []
+                    liked: []
                 }
                 await usersCollectionRef.doc(user.uid).set(userData)
                 resolve({ ...userData, uid: user.uid })
@@ -38,10 +38,13 @@ export const loginUser = () => {
 export const getUser = async () => {
     try {
         const uid = localStorage.getItem('uid')
-        const userDoc = await db.collection('users').doc(uid).get()
-        if (userDoc.exists) {
-            const userData = userDoc.data()
-            return { ...userData, uid }
+        if (uid) {
+            const userDoc = await db.collection('users').doc(uid).get()
+            if (userDoc.exists) {
+                const userData = userDoc.data()
+                return { ...userData, uid }
+            }
+
         }
     } catch (err) {
         console.log(err)
