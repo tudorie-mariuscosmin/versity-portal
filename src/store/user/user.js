@@ -7,7 +7,7 @@ export const userSlice = createSlice({
         name: '',
         email: '',
         avatar: '',
-        uni: localStorage.getItem('uni') || ""
+        uni: ""
     },
     reducers: {
         setUser: (state, action) => {
@@ -15,16 +15,14 @@ export const userSlice = createSlice({
             state.name = action.payload.name
             state.email = action.payload.email
             state.avatar = action.payload.avatar
+            state.uni = action.payload.university
         },
-        login: (state) => { },
-        setUni: (state, action) => {
-            localStorage.setItem('uni', action)
-            state.uni = action;
-        }
+        login: state => { },
+        fetchUser: state => { }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, login, setUni } = userSlice.actions
+export const { setUser, login, fetchUser } = userSlice.actions
 
 export default userSlice.reducer

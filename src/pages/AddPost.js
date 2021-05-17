@@ -21,14 +21,6 @@ const StyledRow = styled(Row)`
     
 `
 
-const Input = styled.input`
-    width:132px;
-    &[type='file']{
-        color:transparent;
-    }
-
-`
-
 export default function AddPost() {
 
     const [photo, setPhoto] = useState(null)

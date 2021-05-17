@@ -1,27 +1,14 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { setUser } from '../store/user/user'
-import { auth } from '../services/firebase'
+import { login } from '../store/user/user'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import firebase from 'firebase'
-const provider = new firebase.auth.GoogleAuthProvider()
 
 
 
 export default function Login() {
     const dispatch = useDispatch()
-    const history = useHistory()
     const handleLogin = async () => {
-        const { user } = await auth.signInWithPopup(provider)
-        const payload = {
-            uid: user.uid,
-            name: user.displayName,
-            email: user.email,
-            avatar: user.photoURL,
-        }
-        dispatch(setUser(payload))
-        history.push("/")
+        dispatch(login())
     }
     return (
         <div className=" vh-100 d-flex justify-content-center align-items-center ">

@@ -9,10 +9,14 @@ import Explore from './pages/Explore'
 import AddPost from './pages/AddPost'
 
 import { createHashHistory } from 'history'
+import { useDispatch } from 'react-redux'
+import { fetchUser } from './store/user/user'
 const history = createHashHistory()
 export { history }
 
 function App() {
+  const dispatch = useDispatch()
+  dispatch(fetchUser())
 
   return (
     <Router>
