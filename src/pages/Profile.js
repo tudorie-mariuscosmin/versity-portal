@@ -26,8 +26,6 @@ export default function Profile() {
                 </Row>
                 <hr />
                 <PostsList showUni />
-
-
             </Container>
 
         </div>

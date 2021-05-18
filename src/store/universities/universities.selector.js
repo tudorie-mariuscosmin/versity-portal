@@ -1,0 +1,1 @@
+export const getAllUnis = state => state.universities.universities;
