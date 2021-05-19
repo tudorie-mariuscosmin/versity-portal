@@ -8,6 +8,7 @@ import { createPost } from '../store/post/post'
 import LoadingContainer from '../components/LoadingContainer'
 import { getUser } from '../store/user/user.selectors'
 import usePhotoPicker from '../hooks/usePhotoPicker'
+import UniversitiesSelect from '../components/UniversitiesSelect'
 
 const StyledCol = styled(Col)`
     display:flex;
@@ -44,7 +45,7 @@ export default function AddPost() {
     }
 
     return (
-        <div>
+        <div style={{ marginBottom: '75px' }}>
             <Navigation />
             <LoadingContainer loading={isLoading} description="Your post is being added right now!">
                 <Container fluid>
@@ -61,14 +62,8 @@ export default function AddPost() {
                         <Form.Control type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
                     </StyledRow>
                     <StyledRow>
-                        <Form.Label>Example select</Form.Label>
-                        <Form.Control as="select" value={university} onChange={(e) => setUniversity(e.target.value)}>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </Form.Control>
+                        <Form.Label>University</Form.Label>
+                        <UniversitiesSelect label="Select a university" value={university} onChange={e => setUniversity(e.target.value)} />
                     </StyledRow>
                     <StyledRow>
                         <Button variant="primary" className="mt-3" onClick={addPost}>

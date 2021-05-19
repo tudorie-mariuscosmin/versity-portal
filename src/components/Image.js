@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const StyledImg = styled.img`
     width:${props => props.fullWidth ? '95vw' : ''};
-    max-width:${props => props.small ? '40vw' : props.xsmall ? '96px' : '400px'};
+    max-width:${props => props.small ? '25vw' : props.xsmall ? '96px' : '400px'};
     border-radius:5px;
 `
 const StyledContainer = styled.div`

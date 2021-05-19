@@ -1,8 +1,15 @@
 export const getAllPosts = state => state.post.posts;
+
 export const getUserPosts = state => {
-    //return state.post.posts ? state.post.posts.filter(post => post.user.uid === state.user.uid).sort((a, b) => b.date - a.date) : []
-    return decorateLikedPosts(state).filter(post => post.user.uid === state.user.uid).sort((a, b) => b.date - a.date);
+    return decorateLikedPosts(state).filter(post => post.user.uid === state.user.uid).sort(sortByDate)
 }
+
+export const getUniPosts = state => {
+    return decorateLikedPosts(state).filter(post => post.university === state.user.uni).sort(sortByDate)
+}
+
+const sortByDate = (a, b) => b.date - a.date;
+
 
 const decorateLikedPosts = state => {
     return state.post.posts.map(post => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Row, Image as BootstrapImage } from 'react-bootstrap'
 import styled from 'styled-components'
 import { dislikePost, likePost, addComment } from '../store/post/post'
 import Comments from './Comments'
@@ -17,12 +17,26 @@ const DateContainer = styled.div`
     font-style:italic;
     color:grey;
 `
+const UserContainer = styled.div`
+
+    font-size:0.9em;
+    font-weight:bold;
+    display: ${props => props.show ? 'block' : 'none'};
+    align-items:center;
+`
+const Avatar = styled(BootstrapImage)`
+    width:25px;
+    height:25px;
+    padding:1px;
+    background-color:#0d6efd;
+    margin-right:5px;
+`
 const UniContainer = styled.div`
     display: ${props => props.show ? 'block' : 'none'};
     font-size:0.9em;
     float:right;
 `
-export default function Post({ post, showUni }) {
+export default function Post({ post, showUni, showUser }) {
     const user = useSelector(getUser)
     const [comment, setComment] = useState('')
     const dispatch = useDispatch()
@@ -43,13 +57,15 @@ export default function Post({ post, showUni }) {
     }
 
     return (
-        <div className="my-1">
-            <Row>
+        <div className="my-2">
+            <div className="d-flex justify-content-between">
+                <UserContainer show={showUser}>
+                    <Avatar src={post.user.avatar} roundedCircle />
+                    {post.user.name}
+                </UserContainer>
 
-                <Col>
-                    <DateContainer>{post.date.toDateString()}</DateContainer>
-                </Col>
-            </Row>
+                <DateContainer>{post.date.toDateString()}</DateContainer>
+            </div>
             <Image className="mx-auto" source={post.photoUrl} fullWidth />
             <Row className="mt-1">
                 <Col >

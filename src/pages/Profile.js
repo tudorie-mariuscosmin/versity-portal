@@ -5,6 +5,7 @@ import { getUser } from '../store/user/user.selectors'
 import Image from '../components/Image'
 import { Col, Container, Row } from 'react-bootstrap'
 import PostsList from '../components/PostsList'
+import { getUserPosts } from '../store/post/post.selectors'
 
 
 
@@ -25,7 +26,7 @@ export default function Profile() {
                     </Col>
                 </Row>
                 <hr />
-                <PostsList showUni />
+                <PostsList showUni selector={getUserPosts} />
             </Container>
 
         </div>
