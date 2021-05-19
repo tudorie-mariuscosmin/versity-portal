@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const StyledImg = styled.img`
     width:${props => props.fullWidth ? '95vw' : ''};
-    max-width:400px;
+    max-width:${props => props.small ? '40vw' : props.xsmall ? '96px' : '400px'};
     border-radius:5px;
 `
 const StyledContainer = styled.div`
@@ -23,13 +23,13 @@ const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
     font-size:3em;
 `
 
-export default function Image({ source, fullWidth }) {
+export default function Image({ source, fullWidth, small, xsmall }) {
     return (
         <div className="d-flex justify-content-center">
             {
                 source !== null ?
                     (
-                        < StyledImg src={source} fullWidth={fullWidth} />
+                        < StyledImg src={source} fullWidth={fullWidth} small={small} xsmall={xsmall} />
                     )
                     :
                     (

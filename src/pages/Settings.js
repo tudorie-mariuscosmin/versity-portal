@@ -1,13 +1,29 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { Container, Form, Button } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import Image from '../components/Image'
+import LoadingContainer from '../components/LoadingContainer'
 import Navigation from '../components/Navigation'
 import UniversitiesSelect from '../components/UniversitiesSelect'
-import { getUser } from '../store/user/user.selectors'
+import usePhotoPicker from '../hooks/usePhotoPicker'
+import { updateUser, logout, deleteAccount } from '../store/user/user'
+import { getUser, getUserLoadingStatus } from '../store/user/user.selectors'
 
+
+
+const EditBtnContainer = styled.div`
+    color:${props => props.isEditing ? '#0d6efd' : 'black'};
+    position:absolute;
+    right:20px;
+    font-size:1.5em;
+    cursor: pointer;
+`
+const ImageContainer = styled.div`
+    cursor: ${props => props.isEditing ? 'pointer' : ''};;
+`
 const Hint = styled.div`
     text-align:${props => props.centered ? 'center' : ''};
     display:${props => props.show ? 'block' : 'none'};
@@ -20,6 +36,7 @@ const BtnContainer = styled.div`
     display:${props => props.show ? 'flex' : 'none'};
     justify-content:center;
     margin-top:10px;
+    flex-direction:column;
 `
 
 const Alert = styled.div`
@@ -32,62 +49,114 @@ const Alert = styled.div`
     margin-top:10px;
 `
 
-
 export default function Settings() {
+    const dispatch = useDispatch()
     const [editMode, setEditMode] = useState(false)
     const user = useSelector(getUser)
     const [name, setName] = useState(user.name)
     const [university, setUniversity] = useState(user.uni)
 
+    const [photo, setPhoto] = useState(null)
+    const [photoUpdated, setPhotoUpdated] = useState(false)
+    const openPhotoPicker = usePhotoPicker(setPhoto)
+
+    const history = useHistory()
+
+    const loading = useSelector(getUserLoadingStatus)
+
 
     useEffect(() => {
         setName(user.name)
         setUniversity(user.uni)
+        setPhoto(user.avatar)
+        setPhotoUpdated(false)
     }, [user, editMode])
 
+    const uploadPhotoHandler = () => {
+        if (editMode) {
+            openPhotoPicker()
+            setPhotoUpdated(true);
+        }
+    }
+    const onSave = () => {
+        const payload = {}
+        if (photoUpdated)
+            payload.photo = photo;
+        payload.user = {
+            name: name, university: university
+        }
+        dispatch(updateUser(payload))
+        setEditMode(false)
+    }
+
+    const onLogout = () => {
+        dispatch(logout())
+        history.push('/login')
+    }
+
+    const onDeleteAccount = () => {
+        dispatch(deleteAccount())
+    }
     return (
-        <div>
+        <div style={{ marginBottom: '75px' }}>
             <Navigation />
-            <Container className="p-3">
-                <div className="d-flex justify-content-end">
-                    {/* <div className="form-check form-switch">
-                        <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
-                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Edit</label>
-                    </div> */}
-                    <FontAwesomeIcon icon={['fas', 'user-edit']} onClick={() => setEditMode(!editMode)} />
-                </div>
+            <LoadingContainer loading={loading} description="Loading...">
+                <Container className="p-3">
+                    <EditBtnContainer isEditing={editMode}>
+                        <FontAwesomeIcon icon={['fas', 'user-edit']} onClick={() => setEditMode(!editMode)} size="lg" />
+                    </EditBtnContainer>
+                    <ImageContainer isEditing={editMode} onClick={uploadPhotoHandler}>
+                        <Image source={photo} small />
 
-                <Image source={user.avatar} />
-                <Hint show={editMode} centered bold size="1.5em">
-                    Edit Mode
+                    </ImageContainer>
+                    <Hint show={editMode} centered bold size="1.5em">
+                        Edit Mode
                 </Hint>
-                <Hint show={editMode} centered italic>
-                    Update your profile photo and credentials
+                    <Hint show={editMode} centered italic>
+                        Update your profile photo and credentials
                 </Hint>
 
-                <Alert show={!user.uni && !university} onClick={() => setEditMode(true)}>
-                    <FontAwesomeIcon icon={['fas', 'bomb']} />
+                    <Alert show={!user.uni && !university} onClick={() => setEditMode(true)}>
+                        <FontAwesomeIcon icon={['fas', 'bomb']} />
                     Please Select your university!
                 </Alert>
-                <div className="py-2">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control disabled={!editMode} value={editMode ? name : user.name} type="text" onChange={e => setName(e.target.value)} />
-                </div>
-                <div className="py-2">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control disabled type="email" value={user.email} />
-                    <Form.Text className="text-muted">
-                        You can't edit your email!
+                    <div className="py-2">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control disabled={!editMode} value={name} type="text" onChange={e => setName(e.target.value)} />
+                    </div>
+                    <div className="py-2">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control disabled type="email" value={user.email} />
+                        <Form.Text className="text-muted">
+                            You can't edit your email!
                     </Form.Text>
-                </div>
-                <div className="py-2">
-                    <UniversitiesSelect disabled={!editMode} label="Select a university" value={editMode ? university : user.uni} onChange={e => setUniversity(e.target.value)} />
-                </div>
+                    </div>
+                    <div className="py-2">
+                        <Form.Label>University</Form.Label>
+                        <UniversitiesSelect disabled={!editMode} label="Select a university" value={editMode ? university : user.uni} onChange={e => setUniversity(e.target.value)} />
+                    </div>
 
-                <BtnContainer show={editMode}>
-                    <Button>Save</Button>
-                </BtnContainer>
-            </Container>
+                    <BtnContainer show={editMode}>
+                        <Button onClick={onSave}>Save</Button>
+                    </BtnContainer>
+
+                    <BtnContainer show>
+                        <Button className="btn-dark" onClick={onLogout} >
+                            Logout
+                        <FontAwesomeIcon icon={['fas', 'sign-out-alt']} className="ms-1" />
+                        </Button>
+                    </BtnContainer>
+                    <hr />
+                    <div className="h6">Danger zone!</div>
+                    <BtnContainer show>
+                        <Button className="btn-danger" onClick={onDeleteAccount}>
+                            Delete Account
+                        <FontAwesomeIcon icon={['fas', 'skull-crossbones']} className="ms-1" />
+                        </Button>
+                    </BtnContainer>
+
+                </Container>
+            </LoadingContainer>
 
         </div >
     )

@@ -1,6 +1,6 @@
 import { takeLatest, put, call } from "@redux-saga/core/effects";
-import { fetchUser, login, setUser } from "./user";
-import { forwardTo, getUser, loginUser } from "./user.services";
+import { deleteAccount, fetchUser, login, logout, setUser, updateUser, updateUserAvatar, setLoadingStatus } from "./user";
+import { deleteUserDb, forwardTo, getUser, loginUser, updateUserDb } from "./user.services";
 
 function* handleLogin() {
     try {
@@ -20,7 +20,25 @@ function* handleFetchUser() {
 
 }
 
+function* updateUserHandler(action) {
+    yield put(setLoadingStatus(true))
+    const imgUrl = yield call(updateUserDb, action)
+    if (imgUrl) {
+        yield put(updateUserAvatar(imgUrl))
+    }
+    yield put(setLoadingStatus(false))
+}
+
+function* deleteAccountHandler(action) {
+    yield put(setLoadingStatus(true))
+    yield call(deleteUserDb)
+    yield put(logout())
+    yield call(forwardTo, '/login')
+}
+
 export default function* userSaga() {
     yield takeLatest(login, handleLogin)
     yield takeLatest(fetchUser, handleFetchUser)
+    yield takeLatest(updateUser, updateUserHandler)
+    yield takeLatest(deleteAccount, deleteAccountHandler)
 }

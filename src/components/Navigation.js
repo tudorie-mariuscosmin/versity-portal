@@ -36,7 +36,8 @@ const FontAwesomeIconStyled = styled(FontAwesomeIcon)`
 font-size: 1.2em;
 `
 const Avatar = styled(Image)`
-width:22px;
+    width:22px;
+    height:22px;
 `
 
 

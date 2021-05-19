@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { createPost } from '../store/post/post'
 import LoadingContainer from '../components/LoadingContainer'
 import { getUser } from '../store/user/user.selectors'
+import usePhotoPicker from '../hooks/usePhotoPicker'
 
 const StyledCol = styled(Col)`
     display:flex;
@@ -29,25 +30,9 @@ export default function AddPost() {
     const [university, setUniversity] = useState('')
     const dispatch = useDispatch()
 
-    const user = useSelector(getUser)
-    const loadPhoto = (event) => {
-        console.log(event.target)
-        if (event.target.files && event.target.files[0]) {
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                setPhoto(e.target.result);
-            };
-            reader.readAsDataURL(event.target.files[0]);
+    const openPhotoPicker = usePhotoPicker(setPhoto)
 
-        }
-    }
-    const createFilePicker = () => {
-        const fileSelector = document.createElement('input');
-        fileSelector.setAttribute('type', 'file');
-        fileSelector.addEventListener('change', loadPhoto)
-        return fileSelector;
-    }
-    const filePicker = createFilePicker();
+    const user = useSelector(getUser)
     const addPost = () => {
         const payload = {
             post: {
@@ -64,7 +49,7 @@ export default function AddPost() {
             <LoadingContainer loading={isLoading} description="Your post is being added right now!">
                 <Container fluid>
                     <StyledRow>
-                        <StyledCol onClick={() => filePicker.click()}>
+                        <StyledCol onClick={openPhotoPicker}>
                             <Image source={photo} />
                         </StyledCol>
                         {/* <StyledCol xs={12} md={6}>

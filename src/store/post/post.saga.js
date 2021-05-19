@@ -27,13 +27,13 @@ function* fetchPostsHandler() {
 }
 
 function* likePostHandler(action) {
-    yield call(likePostDb, action)
     yield put(addLikePost(action.payload.postId))
+    yield call(likePostDb, action)
 }
 
 function* dislikePostHandler(action) {
-    yield call(dislikePostDb, action)
     yield put(removeLikedPost(action.payload.postId))
+    yield call(dislikePostDb, action)
 }
 
 function* addCommentHandler(action) {

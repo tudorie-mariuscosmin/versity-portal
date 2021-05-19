@@ -16,7 +16,7 @@ export default function Profile() {
             <Container className="mt-3">
                 <Row >
                     <Col>
-                        <Image source={user.avatar} />
+                        <Image source={user.avatar} xsmall />
                     </Col>
                     <Col xs={8}>
                         <div className="h3">{user.name}</div>
