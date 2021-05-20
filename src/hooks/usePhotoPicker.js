@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const usePhotoPicker = (setPhoto) => {
     const loadPhoto = (event) => {
         if (event.target.files && event.target.files[0]) {

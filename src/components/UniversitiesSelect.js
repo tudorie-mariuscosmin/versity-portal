@@ -8,6 +8,7 @@ export default function UniversitiesSelect({ label, value, onChange, disabled })
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchUnis())
+        // eslint-disable-next-line
     }, [])
 
     return (

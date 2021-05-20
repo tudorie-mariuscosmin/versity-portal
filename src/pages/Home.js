@@ -8,7 +8,7 @@ export default function Home() {
         <div style={{ marginBottom: '80px' }}>
             <Navigation />
             <Container >
-                <PostsList showUni showUser selector={getUniPosts} />
+                <PostsList showUser selector={getUniPosts} />
 
             </Container>
         </div>

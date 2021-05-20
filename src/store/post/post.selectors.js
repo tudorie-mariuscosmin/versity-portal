@@ -8,6 +8,10 @@ export const getUniPosts = state => {
     return decorateLikedPosts(state).filter(post => post.university === state.user.uni).sort(sortByDate)
 }
 
+export const getSelectedUniPosts = (state, uni) => {
+    return decorateLikedPosts(state).filter(post => post.university === uni).sort(sortByDate);
+}
+
 const sortByDate = (a, b) => b.date - a.date;
 
 
