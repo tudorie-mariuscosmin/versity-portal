@@ -13,7 +13,7 @@ export default function Login() {
     return (
         <div className=" vh-100 d-flex justify-content-center align-items-center ">
             <div className="card p-3 rounded">
-                <h2 className="card-title m-4 mb-4">Welcome to my app</h2>
+                <h2 className="card-title m-4 mb-4">Welcome to Versity Portal</h2>
                 <button className="btn btn-primary" onClick={handleLogin} >
                     <FontAwesomeIcon icon={['fab', 'google']} className="mx-2" />
                 Sign in with google
